@@ -10,7 +10,7 @@ router.post("/signin", (req, res)=>{
             httpOnly:true
         }).send();
     }).catch(err=>{
-        if(err.validateFail){
+        if(err.validatFail){
             res.json({
                 errorMessage:"validation failed"
             })
@@ -19,6 +19,7 @@ router.post("/signin", (req, res)=>{
                 errorMessage:"user not found"
             })
         }else{
+            
             res.json({
                 errorMessage:"something went wrong"
             })
@@ -27,6 +28,7 @@ router.post("/signin", (req, res)=>{
 })
 
 router.post("/signup", (req, res)=>{   
+
     authController.createUser(req.body).then(response=>{
         res.json({success:"user created"});
     }).catch(err=>{
