@@ -55,15 +55,15 @@ router.get("/check", (req,res)=>{
 
         authController.userFindOne(userId).then(response=>{
             if(response.isActive){
-                res.send(true);
+                res.json({login:true, userId});
             }else{
-                res.send(false);
+                res.json({login:false});
             }
         }).catch(err=>{
-            res.send(false);
+            res.json({login:false});
         })
     }else{
-        res.send(false);
+        res.json({login:false});
     }
 })
 

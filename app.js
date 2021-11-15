@@ -12,8 +12,9 @@ const app=express();
 dotenv.config()
 
 // app middlewares
+app.use(express.urlencoded({extended:false}));
 app.use(express.json());
-app.use(express.urlencoded({extended:true}));
+
 app.use(cookieParser());
 app.use(cors({
     origin:["http://localhost:3000"],
@@ -34,7 +35,12 @@ mongoose.connect(process.env.MONGODB, (err)=>{
 
 // admin
 const adminAuth=require("./routers/admin/auth");
+const adminUserManage=require("./routers/admin/users");
+const adminCategoryManage=require("./routers/admin/category");
+
 app.use("/admin/auth", adminAuth);
+app.use("/admin/users", adminUserManage);
+app.use("/admin/category", adminCategoryManage);
 
 // home
 
@@ -42,7 +48,10 @@ app.use("/admin/auth", adminAuth);
 
 // user
 const auth=require("./routers/user/auth");
+const account=require("./routers/user/account");
+
 app.use("/user/auth", auth);
+app.use("/user/account", account);
 
 // shop
 

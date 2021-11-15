@@ -1,5 +1,6 @@
 const mongoose=require("mongoose");
 const bcrypt=require("bcrypt");
+const addressShema = require("./address");
 
 const userSchema=new mongoose.Schema({
     firstname:{
@@ -43,19 +44,7 @@ const userSchema=new mongoose.Schema({
         default:"user",
         type:String
     },
-    address:[
-        {
-            fullName:{type:String},
-            mobileNu:{type:String},
-            pincode:{type:String},
-            locality:{type:String},
-            address:{type:String},
-            town:{type:String},
-            state:{type:String},
-            alterPhon:{type:String},
-            landmark:{type:String}
-        }
-    ]
+    address:[addressShema]
     
 }, {timestamps:true, 
     writeConcern: {

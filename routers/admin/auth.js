@@ -6,7 +6,7 @@ router.use("/signin", (req,res)=>{
     adminAuthController.signin(req.body).then(response=>{
         let token=jwt.sign({_id:response._id}, process.env.JWT_SECRET);
         res.cookie("atoken", token, {
-            maxAge:100000,
+            maxAge:10000000000,
             httpOnly:true
         }).send();
     }).catch(err=>{
@@ -44,12 +44,12 @@ router.get("/check", (req,res)=>{
         let userId=tokenVerify._id;
 
         adminAuthController.adminFindOne(userId).then(response=>{
-            res.send(true);
+            res.json({login:true, userId});
         }).catch(err=>{
-            res.send(false);
+            res.json({login:false});
         })
     }else{
-        res.send(false);
+        res.json({login:false});
     }
 })
 
