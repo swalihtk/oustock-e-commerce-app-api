@@ -5,7 +5,7 @@ module.exports={
         if(token){
             next();
         }else{
-            res.send("Authentication failed");
+            res.status(401).send("Unathorized access");
         }
     }
 }

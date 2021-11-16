@@ -3,6 +3,7 @@ const dotenv=require("dotenv");
 const mongoose=require("mongoose");
 const cookieParser=require("cookie-parser");
 const cors=require("cors");
+const fileUpload=require("express-fileupload");
 
 
 const app=express();
@@ -12,9 +13,9 @@ const app=express();
 dotenv.config()
 
 // app middlewares
-app.use(express.urlencoded({extended:false}));
+app.use(express.urlencoded({extended:true}));
 app.use(express.json());
-
+// app.use(fileUpload());
 app.use(cookieParser());
 app.use(cors({
     origin:["http://localhost:3000"],
@@ -37,10 +38,12 @@ mongoose.connect(process.env.MONGODB, (err)=>{
 const adminAuth=require("./routers/admin/auth");
 const adminUserManage=require("./routers/admin/users");
 const adminCategoryManage=require("./routers/admin/category");
+const adminProductManage=require("./routers/admin/product");
 
 app.use("/admin/auth", adminAuth);
 app.use("/admin/users", adminUserManage);
 app.use("/admin/category", adminCategoryManage);
+app.use("/admin/product", adminProductManage);
 
 // home
 

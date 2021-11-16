@@ -80,10 +80,49 @@ module.exports={
     // delete sub category
     deleteSubCategory:({categoryName, subName})=>{
         return new Promise(async(resolve, reject)=>{
+            
             try{
                 Category.updateOne({categoryName:categoryName}, {
                     $pull:{
                         subCategery:subName
+                    }
+                }).then(response=>{
+                    resolve(response);
+                }).catch(err=>{
+                    reject(err);
+                })
+            }catch(e){
+                reject(e.message);
+            }
+        })
+    },
+
+    // update main cat..
+    updateMainCat:(newName, mainCatName)=>{
+        return new Promise(async(resolve, reject)=>{
+            try{
+                Category.updateOne({categoryName:mainCatName}, {
+                    $set:{
+                        categoryName:newName
+                    }
+                }).then((response=>{
+                    resolve(response);
+                })).catch(e=>{
+                    resolve(e);
+                })
+            }catch(e){
+                reject(e.message);
+            }
+        })
+    },
+
+    // udpate subcategory name
+    updateSubCat:({mainCatName, subCatName, subCatNewName})=>{
+        return new Promise(async(resolve, reject)=>{
+            try{
+                Category.updateOne({categoryName:mainCatName,subCategery:subCatName}, {
+                    $set:{
+                        "subCategery.$":subCatNewName
                     }
                 }).then(response=>{
                     resolve(response);

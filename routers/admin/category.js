@@ -31,8 +31,8 @@ router.get("/getSub/:categoryName",adminAuthenticate, (req,res)=>{
 })
 
 // delete main from category
-router.delete("/deleteMain",adminAuthenticate, (req, res)=>{
-    categoryManager.deleteMainCategory(req.body.categoryName).then(response=>{
+router.delete("/deleteMain/:categoryName",adminAuthenticate, (req, res)=>{
+    categoryManager.deleteMainCategory(req.params.categoryName).then(response=>{
         res.json(response);
     }).catch(err=>{
         res.json(err);
@@ -41,10 +41,34 @@ router.delete("/deleteMain",adminAuthenticate, (req, res)=>{
 
 // delete sub from category
 router.delete("/deleteSub",adminAuthenticate, (req, res)=>{
-    categoryManager.deleteSubCategory(req.body).then(response=>{
+    
+    categoryManager.deleteSubCategory(req.query).then(response=>{
         res.json(response);
     }).catch(err=>{
         res.json(err);
+    })
+})
+
+
+// update main category name
+router.put("/updateMain",adminAuthenticate, (req, res)=>{
+    // newName, mainCatName
+
+    categoryManager.updateMainCat(req.body.newName, req.body.mainCatName).then(response=>{
+        res.json(response);
+    }).catch(e=>{
+        res.status(401).send(e);
+    })
+})
+
+// update sub category name
+router.put("/updateSub",adminAuthenticate, (req, res)=>{
+    // mainCatName, subCatName, subCatNewName
+
+    categoryManager.updateSubCat(req.body).then(response=>{
+        res.json(response);
+    }).catch(e=>{
+        res.status(401).send(e);
     })
 })
 
