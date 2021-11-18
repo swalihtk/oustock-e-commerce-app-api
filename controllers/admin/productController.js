@@ -93,15 +93,13 @@ module.exports={
                         for(let imageId of ids){
                             await Product.updateOne({_id:productId, "productImages._id":imageId}, {
                                 $set:{
-                                    "productImages.$.img":images[count].imgs
+                                    "productImages.$.img":images[count].img
                                 }
                             })
 
                             count++;
-                            if(count==ids.length){
-                                resolve(response);
-                            }
                         }
+                        resolve(response);
                     }else{
                         resolve(response);
                     }
