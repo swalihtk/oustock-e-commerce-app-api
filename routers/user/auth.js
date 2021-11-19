@@ -17,11 +17,15 @@ router.post("/signin", (req, res) => {
     .catch((err) => {
       if (err.validatFail) {
         res.json({
-          errorMessage: "validation failed",
+          errorMessage: "Password is incorrect",
         });
       } else if (err.usernotfound) {
         res.json({
           errorMessage: "user not found",
+        });
+      } else if (err.blocked) {
+        res.json({
+          errorMessage: "User has been blocked",
         });
       } else {
         res.json({

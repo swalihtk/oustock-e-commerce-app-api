@@ -72,7 +72,8 @@ module.exports = {
     return new Promise(async (resolve, reject) => {
       try {
         Category.deleteOne({ categoryName: categoryName })
-          .then((response) => {
+          .then(async (response) => {
+            await Product.deleteMany({ category: categoryName });
             resolve(response);
           })
           .catch((err) => {
@@ -96,7 +97,11 @@ module.exports = {
             },
           }
         )
-          .then((response) => {
+          .then(async (response) => {
+            await Product.deleteMany({
+              category: categoryName,
+              subCategory: subName,
+            });
             resolve(response);
           })
           .catch((err) => {
@@ -120,7 +125,15 @@ module.exports = {
             },
           }
         )
-          .then((response) => {
+          .then(async (response) => {
+            let update = await Product.updateMany(
+              { category: mainCatName },
+              {
+                $set: {
+                  category: newName,
+                },
+              }
+            );
             resolve(response);
           })
           .catch((e) => {
@@ -144,7 +157,15 @@ module.exports = {
             },
           }
         )
-          .then((response) => {
+          .then(async (response) => {
+            await Product.updateMany(
+              { category: mainCatName, subCategory: subCatName },
+              {
+                $set: {
+                  "subCategory.$": subCatNewName,
+                },
+              }
+            );
             resolve(response);
           })
           .catch((err) => {
