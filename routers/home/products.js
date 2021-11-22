@@ -50,4 +50,19 @@ router.get("/listSub", (req, res) => {
     });
 });
 
+// search products
+router.get("/search", (req, res) => {
+  /*** Product Req Query ***/
+  let { productName } = req.query;
+
+  productController
+    .searchProducts(productName)
+    .then((response) => {
+      res.json(response);
+    })
+    .catch((err) => {
+      res.status(400).send(err);
+    });
+});
+
 module.exports = router;

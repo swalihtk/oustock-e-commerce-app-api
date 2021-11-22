@@ -56,9 +56,11 @@ app.use("/home/products", productHome);
 // user
 const auth = require("./routers/user/auth");
 const account = require("./routers/user/account");
+const cart = require("./routers/user/cart");
 
 app.use("/user/auth", auth);
 app.use("/user/account", account);
+app.use("/user/cart", cart);
 
 // shop
 

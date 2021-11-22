@@ -52,4 +52,21 @@ module.exports = {
       }
     });
   },
+
+  // search products
+  searchProducts: (productName) => {
+    return new Promise(async (resolve, reject) => {
+      try {
+        if (!productName) {
+          productName = " ";
+        }
+        let searchResults = await Product.find({
+          name: { $regex: productName, $options: "i" },
+        });
+        resolve(searchResults);
+      } catch (e) {
+        reject(e.message);
+      }
+    });
+  },
 };

@@ -46,8 +46,14 @@ router.post("/add", adminAuthenticate, async (req, res) => {
 
 // list all products
 router.get("/listAll", adminAuthenticate, (req, res) => {
+  let { page } = req.query;
+
+  if (!page) {
+    page = 1;
+  }
+
   productController
-    .listAllProducts()
+    .listAllProducts(page)
     .then((response) => {
       res.json(response);
     })
