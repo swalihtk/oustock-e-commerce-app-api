@@ -46,4 +46,14 @@ router.post("/delete", (req, res) => {
     });
 });
 
+// get all products
+router.get("/all/:userId", async (req, res) => {
+  try {
+    let response = await cartController.getAllItemsInCart(req.params.userId);
+    res.json(response);
+  } catch (e) {
+    res.status(400).json(e);
+  }
+});
+
 module.exports = router;

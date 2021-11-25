@@ -8,54 +8,29 @@ module.exports = {
         let existingCart = await Cart.findOne({ userId: objectId(userId) });
 
         if (existingCart) {
-          let existingProduct = await Cart.findOne({
-            userId: objectId(userId),
-            "products.productId": objectId(productId),
-          });
-
-          if (existingProduct) {
-            Cart.updateOne(
-              {
-                userId: objectId(userId),
-                "products.productId": objectId(productId),
+          Cart.updateOne(
+            { userId: objectId(userId) },
+            {
+              $push: {
+                products: {
+                  productId: objectId(productId),
+                  quantity: 1,
+                },
               },
-              {
-                $inc: {
-                  "products.$.quantity": 1,
-                },
-              }
-            )
-              .then((response) => {
-                resolve(response);
-              })
-              .catch((err) => {
-                reject(err);
-              });
-          } else {
-            Cart.updateOne(
-              { userId: objectId(userId) },
-              {
-                $push: {
-                  products: {
-                    productId: productId,
-                    quantity: 1,
-                  },
-                },
-              }
-            )
-              .then((response) => {
-                resolve(response);
-              })
-              .catch((err) => {
-                reject(err);
-              });
-          }
+            }
+          )
+            .then((response) => {
+              resolve(response);
+            })
+            .catch((err) => {
+              reject(err);
+            });
         } else {
           let newCart = new Cart({
             userId: userId,
             products: [
               {
-                productId: productId,
+                productId: objectId(productId),
                 quantity: 1,
               },
             ],
@@ -73,7 +48,7 @@ module.exports = {
     return new Promise(async (resolve, reject) => {
       try {
         if (action === 1) {
-          Cart.updateOne(
+          await Cart.updateOne(
             {
               userId: objectId(userId),
               "products.productId": objectId(productId),
@@ -83,21 +58,12 @@ module.exports = {
                 "products.$.quantity": 1,
               },
             }
-          )
-            .then((response) => {
-              resolve(response);
-            })
-            .catch((err) => {
-              reject(err);
-            });
+          );
         } else {
           await Cart.updateOne(
             {
               userId: objectId(userId),
               "products.productId": objectId(productId),
-              "products.quantity": {
-                $gt: 0,
-              },
             },
             {
               $inc: {
@@ -105,25 +71,9 @@ module.exports = {
               },
             }
           );
-
-          await Cart.updateOne(
-            {
-              userId: objectId(userId),
-              "products.productId": objectId(productId),
-              "products.quantity": {
-                $eq: 0,
-              },
-            },
-            {
-              $pull: {
-                products: {
-                  productId: objectId(productId),
-                },
-              },
-            }
-          );
-          resolve("success");
         }
+
+        resolve("Count changed");
       } catch (err) {
         reject(err.message);
       }
@@ -154,6 +104,59 @@ module.exports = {
           .catch((err) => {
             reject(err);
           });
+      } catch (e) {
+        reject(e.message);
+      }
+    });
+  },
+
+  // get cart product
+  getAllItemsInCart: function (userId) {
+    return new Promise(async (resolve, reject) => {
+      try {
+        if (!userId) resolve({ prdouctDetails: [], count: 0 });
+
+        let allItems = await Cart.aggregate([
+          {
+            $match: {
+              userId: userId,
+            },
+          },
+          {
+            $unwind: "$products",
+          },
+
+          {
+            $lookup: {
+              from: "products",
+              localField: "products.productId",
+              foreignField: "_id",
+              as: "productInfo",
+            },
+          },
+
+          {
+            $unwind: "$productInfo",
+          },
+
+          {
+            $addFields: {
+              totalPrice: {
+                $multiply: ["$products.quantity", "$productInfo.price"],
+              },
+            },
+          },
+          {
+            $project: {
+              _id: 0,
+              userId: 0,
+              createdAt: 0,
+              updatedAt: 0,
+            },
+          },
+        ]);
+
+        resolve({ prdouctDetails: allItems, count: allItems.length });
       } catch (e) {
         reject(e.message);
       }

@@ -114,4 +114,18 @@ router.delete("/delete/:productId", adminAuthenticate, (req, res) => {
     });
 });
 
+// filter products
+router.get("/filter", (req, res) => {
+  // mainCat,subCat
+  let { mainCat, subCat } = req.query;
+  productController
+    .filterProducts(mainCat, subCat)
+    .then((response) => {
+      res.json(response);
+    })
+    .catch((err) => {
+      res.status(400).json(err);
+    });
+});
+
 module.exports = router;

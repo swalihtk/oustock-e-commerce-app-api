@@ -55,9 +55,12 @@ module.exports = {
   listAllProducts: function (pageNum) {
     return new Promise(async (resolve, reject) => {
       try {
-        let products = await Product.find({}).sort({ createdAt: -1 });
-        let listProducts = products.slice(pageNum * 10 - 10, pageNum * 10);
-        resolve({ listProducts, count: products.length });
+        let products = await Product.find({})
+          .sort({ createdAt: -1 })
+          .skip(pageNum * 10 - 10)
+          .limit(pageNum * 10);
+        let productLength = await Product.find({}).count();
+        resolve({ products, count: productLength });
       } catch (e) {
         reject(e.message);
       }
@@ -142,6 +145,25 @@ module.exports = {
         resolve(product);
       } catch (er) {
         reject(er.message);
+      }
+    });
+  },
+
+  // filter products
+  filterProducts: (categoryName, subCategory) => {
+    return new Promise(async (resolve, reject) => {
+      try {
+        //if (!categoryName || !subCategory) reject("Not found");
+
+        let products = await Product.find({
+          category: categoryName,
+        });
+        let count = await Product.find({
+          category: categoryName,
+        }).count();
+        resolve({ products, count });
+      } catch (err) {
+        reject(err.message);
       }
     });
   },

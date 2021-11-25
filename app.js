@@ -57,10 +57,12 @@ app.use("/home/products", productHome);
 const auth = require("./routers/user/auth");
 const account = require("./routers/user/account");
 const cart = require("./routers/user/cart");
+const order = require("./routers/user/order");
 
 app.use("/user/auth", auth);
 app.use("/user/account", account);
 app.use("/user/cart", cart);
+app.use("/user/order", order);
 
 // shop
 
