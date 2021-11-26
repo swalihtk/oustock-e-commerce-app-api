@@ -52,14 +52,15 @@ module.exports = {
   },
 
   // list all products
-  listAllProducts: function (pageNum) {
+  listAllProducts: function (pageNum, categoryName,name, sort) {
     return new Promise(async (resolve, reject) => {
+
       try {
-        let products = await Product.find({})
-          .sort({ createdAt: -1 })
+        let products = await Product.find({category:{$regex:categoryName}, name:{$regex:name, $options:"i"}})
+          .sort({ createdAt: sort })
           .skip(pageNum * 10 - 10)
           .limit(pageNum * 10);
-        let productLength = await Product.find({}).count();
+        let productLength = await Product.find({category:{$regex:categoryName}, name:{$regex:name, $options:"i"}}).count();
         resolve({ products, count: productLength });
       } catch (e) {
         reject(e.message);

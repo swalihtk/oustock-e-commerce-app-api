@@ -6,7 +6,7 @@ module.exports = {
       try {
         let latestProducts = await Product.find({})
           .sort({ createdAt: -1 })
-          .limit(4);
+          .limit(8);
         resolve(latestProducts);
       } catch (e) {
         reject(e.message);

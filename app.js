@@ -38,11 +38,13 @@ const adminAuth = require("./routers/admin/auth");
 const adminUserManage = require("./routers/admin/users");
 const adminCategoryManage = require("./routers/admin/category");
 const adminProductManage = require("./routers/admin/product");
+const adminBanner=require("./routers/admin/banner");
 
 app.use("/admin/auth", adminAuth);
 app.use("/admin/users", adminUserManage);
 app.use("/admin/category", adminCategoryManage);
 app.use("/admin/product", adminProductManage);
+app.use("/admin/banner", adminBanner);
 
 // home
 const homeCategory = require("./routers/home/category");

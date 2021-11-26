@@ -46,14 +46,22 @@ router.post("/add", adminAuthenticate, async (req, res) => {
 
 // list all products
 router.get("/listAll", adminAuthenticate, (req, res) => {
-  let { page } = req.query;
+  let { page, mainCategory, sort, name } = req.query;
 
   if (!page) {
     page = 1;
   }
+  if(!mainCategory){
+    mainCategory="";
+  }
+  if(!sort){
+    sort=-1;
+  }
+  if(!name) name="";
+  
 
   productController
-    .listAllProducts(page)
+    .listAllProducts(page,mainCategory,name, sort)
     .then((response) => {
       res.json(response);
     })
@@ -114,18 +122,6 @@ router.delete("/delete/:productId", adminAuthenticate, (req, res) => {
     });
 });
 
-// filter products
-router.get("/filter", (req, res) => {
-  // mainCat,subCat
-  let { mainCat, subCat } = req.query;
-  productController
-    .filterProducts(mainCat, subCat)
-    .then((response) => {
-      res.json(response);
-    })
-    .catch((err) => {
-      res.status(400).json(err);
-    });
-});
+
 
 module.exports = router;

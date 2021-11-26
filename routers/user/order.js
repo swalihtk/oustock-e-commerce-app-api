@@ -37,7 +37,8 @@ router.post("/changeStatus", (req,res)=>{
 // admin
 // list all orders
 router.get("/listAll", (req,res)=>{
-    orderControll.listAllOrders().then(response=>{
+    let {page}=req.query;
+    orderControll.listAllOrders(page).then(response=>{
         res.status(200).json(response);
     }).catch(e=>{
         res.status(400).send(e);

@@ -50,13 +50,17 @@ module.exports={
                     state:status,
                     date:new Date()
                 }
-                let response=await Order.updateOne({userId:userId, "orderDetails._id":orderId},
-                {
-                    $pull:{
-                        "orderDetails.$.status":status
+                let response=await Order.updateOne(
+                    {
+                        userId:userId,
+                        "orderDetails._id":objectId(orderId)
+                    },
+                    {
+                        $push:{
+                            "orderDetails.$.status":body
+                        }
                     }
-                }
-                )
+                    );
                 resolve(response);
             }catch(e){
                 reject(e);
@@ -64,11 +68,39 @@ module.exports={
         })
     },
 
-    listAllOrders:function(){
+    listAllOrders:function(pageNu){
         return new Promise(async(resolve,reject)=>{
             try{
-                let allOrders=await Order.find({});
-                resolve(allOrders);
+                if(!pageNu) pageNu=1;
+                let allOrders=await Order.aggregate([
+                    {
+                        $unwind:"$orderDetails"
+                    },
+                    {
+                        $lookup:{
+                            from:"products",
+                            localField:"orderDetails.products.productId",
+                            foreignField:"_id",
+                            as:"productInfo"
+                        }
+                    },
+                    {
+                        $skip:(pageNu*10-10)
+                    },
+                    {
+                        $limit:(pageNu*10)
+                    },
+                    
+                ])
+                let count=await Order.aggregate([
+                    {
+                        $unwind:"$orderDetails"
+                    },
+                    {
+                        $count:"total"
+                    }
+                ])
+                resolve({allOrders, total:count[0].total});
             }catch(e){
                 reject(e.message);
             }
