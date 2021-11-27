@@ -44,12 +44,28 @@ module.exports = {
       return new Promise(async(resolve,reject)=>{
           try{
             let addressBody={fullName,mobileNu,pincode,address,town,state,landmark}
-            let response=await Users.updateOne({_id:userId}, {
+            let existingAddress=await Users.findOne({_id:userId});
+            
+            if(existingAddress.address.length>=4){
+              await Users.updateOne({_id:userId}, {
+                $pop:{
+                  address:-1
+                }
+              });
+              let response=await Users.updateOne({_id:userId}, {
                 $push:{
                     address:addressBody
-                }
-            })
-            resolve(response);
+                  }
+              })
+              resolve(response);
+            }else{
+              let response=await Users.updateOne({_id:userId}, {
+                $push:{
+                    address:addressBody
+                  }
+              })
+              resolve(response);
+            }
           }catch(e){
             reject(e.message);
           }
