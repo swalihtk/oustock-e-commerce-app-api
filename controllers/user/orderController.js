@@ -16,7 +16,7 @@ module.exports={
                     }
                     productArray.push(body);
                 })
-                let orderBody= {address,products:productArray,status:{state:"confirmed", date:new Date()},totalPrice,paymentMethod}
+                let orderBody= {address,products:productArray,status:{state:"CONFIRMED", date:new Date()},totalPrice,paymentMethod}
 
                 if(!existingUser){
                     let newOrder=new Order({

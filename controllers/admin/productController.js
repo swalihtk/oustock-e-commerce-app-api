@@ -34,8 +34,6 @@ module.exports = {
         let productSave = new Product({
           name: body.name,
           price: body.price,
-          details: body.details,
-          shortDescription: body.shortDescription,
           color: body.color,
           brand: body.color,
           category: body.category,
