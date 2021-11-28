@@ -4,6 +4,9 @@ const productController = require("../../controllers/admin/productController");
 const { adminAuthenticate } = require("../../middlewares/adminMiddlewares");
 const upload = require("../../components/mutler");
 
+
+const cloudinary=require("../../components/cloudinary");
+
 router.post(
   "/getImageLink",
   upload.array("image"),
@@ -37,7 +40,7 @@ router.post("/add", adminAuthenticate, async (req, res) => {
   productController
     .addNewProduct(req.body)
     .then((response) => {
-      res.json({ productAdded: true });
+      res.status(201).json(response);
     })
     .catch((err) => {
       res.status(400).send(err);
@@ -83,7 +86,7 @@ router.get("/listOne/:prodId", adminAuthenticate, (req, res) => {
 });
 
 // update product
-router.put("/update/:productId", adminAuthenticate, (req, res) => {
+router.put("/update/:productId", adminAuthenticate, async(req, res) => {
   /******PARAMS******
     name,
     price,

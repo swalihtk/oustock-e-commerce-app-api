@@ -1,5 +1,7 @@
 const Users = require("../../models/user/users");
 const objectId=require("mongoose").Types.ObjectId;
+const crypto=require("crypto");
+const cloudinary=require("../../components/cloudinary");
 
 module.exports = {
   getUserDetails: (userId) => {
@@ -11,6 +13,55 @@ module.exports = {
         reject(e.message);
       }
     });
+  },
+
+  editUserDetails:async(id,firstname, lastname, username, email)=>{
+    return new Promise(async(resolve,reject)=>{
+      try{
+        let existingUserWithEmail=await Users.findOne({email:email});
+        if(existingUserWithEmail){
+          reject({error:"Email already registerd"});
+          return;
+        }
+
+        let response=await Users.updateOne({_id:id}, {
+          $set:{
+            firstname:firstname,
+            lastname:lastname,
+            username:username,
+            email:email
+          }
+        })
+
+        resolve(response);
+      }catch(e){
+        reject({error:e.message});
+      }
+    })
+  },
+
+  changeUserPassword:function(id, verifyPassword, newPassword){
+    return new Promise(async(resolve,reject)=>{
+      try{
+        let password = crypto
+            .createHmac("sha256", verifyPassword)
+            .update("secret")
+            .digest("hex");
+        let existingUser=await Users.findOne({_id:id, password:password});
+        if(!existingUser){
+          reject({err:"Password verification failed!"});
+        }
+
+        let newPasswordHash=crypto.createHmac("sha256", newPassword).update("secret").digest("hex");
+        let response=await Users.updateOne({_id:id}, {
+          $set:{
+            password:newPasswordHash
+          }
+        })
+      }catch(e){
+        reject({err:e.message});
+      }
+    })
   },
 
   getUserAddresses: (userId) => {
@@ -38,6 +89,27 @@ module.exports = {
         }
     });
   },
+
+  changeProfilePic:function(id, profileImage){
+    return new Promise(async(resolve,reject)=>{
+      try{
+        let response=await cloudinary.uploader.upload(profileImage, {
+          upload_preset:"pezo4etc"
+        });
+
+        let updateResponse=await Users.updateOne({_id:id},{
+          $set:{
+            profileImage:response.secure_url
+          }
+        })
+
+        resolve(updateResponse);
+      }catch(e){
+        reject(e.message);
+      }
+    })
+  }
+  ,
 
   // add new address
   addNewAddress: ({userId,fullName,mobileNu,pincode,address,town,state,landmark,}) => {
@@ -107,5 +179,7 @@ module.exports = {
             reject(e.message);
           }
       })
-  }
+  },
+
+
 };

@@ -60,4 +60,34 @@ router.put("/address/edit", (req, res)=>{
     })
 })
 
+// change account information
+router.put("/changeDetails/:id", (req,res)=>{
+    let {firstName, lastName, username, email}=req.body;
+    accountController.editUserDetails(req.params.id,firstName, lastName, username, email).then(response=>{
+        res.status(201).json(response);
+    }).catch(e=>{
+        res.json(e);
+    });
+})
+
+// change user password
+router.put("/changePassword/:id", (req, res)=>{
+    let {verifyPassword, newPassword}=req.body;
+    accountController.changeUserPassword(req.params.id, verifyPassword, newPassword).then(response=>{
+        res.status(201).json(response);
+    }).catch(e=>{
+        res.json(e);
+    })
+})
+
+// change user profile image
+router.put("/changeProfileImage/:id", (req,res)=>{
+    let {image}=req.body;
+    accountController.changeProfilePic(req.params.id, image).then(response=>{
+        res.status(201).json(response);
+    }).catch(e=>{
+        res.status(401).json(e);
+    })
+})
+
 module.exports = router;

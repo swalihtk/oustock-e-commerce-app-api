@@ -2,10 +2,10 @@ const router=require("express").Router();
 const multer=require("../../components/mutler");
 const bannerController=require("../../controllers/admin/bannerController");
 
-router.post("/create",multer.single("image"), (req,res)=>{
-    let {title, url}=req.body;
+router.post("/create", (req,res)=>{
+    let {title, url, image}=req.body;
 
-    bannerController.createBanner(req.file.path,title, url).then(response=>{
+    bannerController.createBanner(title, url, image).then(response=>{
         res.status(201).json(response);
     }).catch(err=>{
         res.status(400).json(err);

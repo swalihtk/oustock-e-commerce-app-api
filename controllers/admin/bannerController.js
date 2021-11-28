@@ -1,11 +1,15 @@
 const Banner=require("../../models/admin/Banner");
+const cloudinary=require("../../components/cloudinary");
 
 module.exports={
-    createBanner:function(imageUrl, title, linkUrl){
+    createBanner:function(title, linkUrl, image){
         return new Promise(async(resolve,reject)=>{
             try{
+                let cloudResponse=await cloudinary.uploader.upload(image, {
+                    upload_preset:"pezo4etc"
+                });
                 let banner=new Banner({
-                    poster_image:imageUrl,
+                    poster_image:cloudResponse.secure_url,
                     title:title,
                     link:linkUrl
                 })
