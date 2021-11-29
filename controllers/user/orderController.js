@@ -1,6 +1,8 @@
 const Order=require("../../models/user/order");
 const Cart=require("../../models/user/cart");
 let objectId=require("mongoose").Types.ObjectId;
+const Razorpay = require("razorpay");
+let crypto=require("crypto");
 
 module.exports={
     addNewOrder:function(userId, address, products, totalPrice, paymentMethod){
@@ -163,6 +165,50 @@ module.exports={
                 resolve(response[0]);
             }catch(e){
                 reject(e.message);
+            }
+        })
+    },
+
+
+    /***********PAYMENT INTEGRATION***********/
+    razerpayIntegrate:function(amount){
+        return new Promise(async(resolve,reject)=>{
+            try{
+                const instance = new Razorpay({
+                    key_id: process.env.RAZERPAY_KEY_ID,
+                    key_secret: process.env.RAZERPAY_KEY_SECRET,
+                });
+
+                const options = {
+                    amount: amount*10, // amount in smallest currency unit
+                    currency: "INR",
+                    receipt: "receipt_order_74394",
+                };
+
+                let order=await instance.orders.create(options);
+                resolve(order);
+            }catch(e){
+                reject({error:e.message});
+            }
+        })
+    },
+
+    razorpaySuccessValidation:function (userId,orderId, razorpayPaymentId, razorpaySignature, address, products, totalPrice){
+       
+        return new Promise(async(resolve,reject)=>{
+            try{
+                let generatedSignature=await crypto.createHmac("sha256",process.env.RAZERPAY_KEY_SECRET)
+                .update(orderId+"|"+razorpayPaymentId)
+                .digest("hex");
+
+                if(generatedSignature===razorpaySignature){
+                    let response=await this.addNewOrder(userId, address, products, totalPrice, "Razorpay")
+                    resolve(response);
+                }else{
+                    reject({error:"error"})
+                }
+            }catch(e){
+                reject({error:e.message});
             }
         })
     }

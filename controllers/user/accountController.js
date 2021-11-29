@@ -58,6 +58,7 @@ module.exports = {
             password:newPasswordHash
           }
         })
+        resolve(response);
       }catch(e){
         reject({err:e.message});
       }
@@ -176,10 +177,36 @@ module.exports = {
 
             resolve(response);
           }catch(e){
-            reject(e.message);
+            reject({error:e.message});
           }
       })
   },
 
-
+  // get Address detals
+  getOneAddress:function(userId, addressId){
+    return new Promise(async(resolve,reject)=>{
+      try{
+        let address=await Users.aggregate([
+          {
+              $unwind:"$address"
+          },
+          {
+              $match:
+              {
+                  _id:objectId(userId),
+                  "address._id":objectId(addressId)
+              }
+          },
+          {
+              $project:{
+                  address:1
+              }
+          }
+          ])
+        resolve(address[0].address);
+      }catch(e){
+        reject({error:e.message});
+      }
+    })
+  }
 };

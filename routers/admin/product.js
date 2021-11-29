@@ -2,26 +2,6 @@ const router = require("express").Router();
 // const upload=require("../../components/mutler");
 const productController = require("../../controllers/admin/productController");
 const { adminAuthenticate } = require("../../middlewares/adminMiddlewares");
-const upload = require("../../components/mutler");
-
-
-const cloudinary=require("../../components/cloudinary");
-
-router.post(
-  "/getImageLink",
-  upload.array("image"),
-  adminAuthenticate,
-  (req, res) => {
-    productController
-      .prouctImageUploadLink(req.files)
-      .then((response) => {
-        res.json(response);
-      })
-      .catch((err) => {
-        res.json(err);
-      });
-  }
-);
 
 router.post("/add", adminAuthenticate, async (req, res) => {
   /*****PARAMS********

@@ -1,5 +1,4 @@
 const router=require("express").Router();
-const multer=require("../../components/mutler");
 const bannerController=require("../../controllers/admin/bannerController");
 
 router.post("/create", (req,res)=>{

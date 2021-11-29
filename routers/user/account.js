@@ -20,6 +20,14 @@ router.get("/address/list/:userId", (req, res) => {
     })
 });
 
+router.get("/address/getOne/:userId/:addressId", (req,res)=>{
+    accountController.getOneAddress(req.params.userId, req.params.addressId).then(response=>{
+        res.status(200).json(response);
+    }).catch(e=>{
+        res.json(e);
+    })
+})
+
 router.post("/address/add", (req, res) => {
 //   userId
 //   fullName:String,
@@ -45,7 +53,7 @@ router.delete("/address/delete",(req,res)=>{
     accountController.deleteAddress(userId, addressId).then(response=>{
         res.status(201).json(response);
     }).catch(err=>{
-        res.status(401).json(err);
+        res.json(err);
     })
 })
 
@@ -56,7 +64,7 @@ router.put("/address/edit", (req, res)=>{
     accountController.editAddress(userId, addressId, req.body).then(response=>{
         res.status(201).json(response);
     }).catch(err=>{
-        res.status(401).send(err);
+        res.json(err);
     })
 })
 

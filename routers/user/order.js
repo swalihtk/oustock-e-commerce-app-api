@@ -66,4 +66,25 @@ router.get("/getProductDetails/:userId/:orderId", (req, res)=>{
     })
 })
 
+/******* PAYMENT *******/
+
+// razerpay
+router.post("/razorpay", (req,res)=>{
+    let {amount}=req.body;
+    orderControll.razerpayIntegrate(amount).then(response=>{
+        res.status(200).json(response);
+    }).catch(err=>{
+        res.json(err);
+    })
+})
+
+router.post("/razorpay/success", (req, res)=>{
+    let {userId,orderId, razorpayPaymentId, razorpaySignature, address, totalPrice, products}=req.body;
+    orderControll.razorpaySuccessValidation(userId,orderId, razorpayPaymentId, razorpaySignature, address, products, totalPrice).then(response=>{
+        res.status(200).json(response);
+    }).catch(e=>{
+        res.json(e);
+    })
+})
+
 module.exports = router;
