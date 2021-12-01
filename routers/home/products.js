@@ -65,4 +65,17 @@ router.get("/search", (req, res) => {
     });
 });
 
+// get offerd products
+router.get("/getOfferd", (req,res)=>{
+  let {page, forBanner}=req.query;
+  if(!page) page=1;
+  if(!forBanner) forBanner=false;
+
+  productController.getOfferProducts(forBanner, page).then(response=>{
+    res.status(200).json(response);
+  }).catch(err=>{
+    res.json(err);
+  })
+})
+
 module.exports = router;

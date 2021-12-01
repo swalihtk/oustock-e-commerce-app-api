@@ -39,12 +39,14 @@ const adminUserManage = require("./routers/admin/users");
 const adminCategoryManage = require("./routers/admin/category");
 const adminProductManage = require("./routers/admin/product");
 const adminBanner=require("./routers/admin/banner");
+const adminOffer=require("./routers/admin/offer");
 
 app.use("/admin/auth", adminAuth);
 app.use("/admin/users", adminUserManage);
 app.use("/admin/category", adminCategoryManage);
 app.use("/admin/product", adminProductManage);
 app.use("/admin/banner", adminBanner);
+app.use("/admin/offers", adminOffer);
 
 // home
 const homeCategory = require("./routers/home/category");

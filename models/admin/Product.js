@@ -29,7 +29,13 @@ const productSchema = new mongoose.Schema(
     },
     subCategory: [],
     quantity: { type: String },
-    discription:{type:String}
+    discription:{type:String},
+    offer:{
+      offerPrice:{type:Number},
+      expireDate:{type:String},
+      offerName:{type:String},
+      offerId:{type:String}
+    }
   },
   {
     timestamps: true,

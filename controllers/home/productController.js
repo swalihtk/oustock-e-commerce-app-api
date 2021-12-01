@@ -69,4 +69,22 @@ module.exports = {
       }
     });
   },
+
+  // offer products
+  getOfferProducts:(forBanner, pageNum)=>{
+    return new Promise(async(resolve,reject)=>{
+      try{
+        if(forBanner){
+          let offerdProducts=await Product.find({offer:{$exists:true}}).limit(8);
+          resolve(offerdProducts);
+        }else{
+          let offerdProducts=await Product.find({offer:{$exists:true}}).skip(pageNum*10-10).limit(pageNum*10);
+          let count=await Product.find({offer:{$exists:true}}).count();
+          resolve({products:offerdProducts, total:count});
+        }
+      }catch(e){
+        reject({error:e.message});
+      }
+    })
+  }
 };
