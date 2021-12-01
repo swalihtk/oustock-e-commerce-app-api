@@ -1,5 +1,6 @@
 const Cart = require("../../models/user/cart");
 const objectId = require("mongoose").Types.ObjectId;
+const Product = require("../../models/admin/Product");
 
 module.exports = {
   addToCart: function (userId, productId) {
@@ -48,6 +49,32 @@ module.exports = {
     return new Promise(async (resolve, reject) => {
       try {
         if (action === 1) {
+          let item = await Cart.aggregate([
+            {
+              $unwind: "$products",
+            },
+            {
+              $match: {
+                userId: userId,
+                "products.productId": objectId(productId),
+                "products.quantity": { $lt: 3 },
+              },
+            },
+          ]);
+
+          if (item.length < 1) {
+            resolve(item);
+            return;
+          }
+
+          // checking quantity
+          let product=await Product.findOne({_id:productId});
+          
+          if(product.quantity<=item[0].products.quantity){
+            resolve("Quantity limited..");
+            return;
+          }
+
           await Cart.updateOne(
             {
               userId: objectId(userId),
@@ -60,6 +87,24 @@ module.exports = {
             }
           );
         } else {
+          let item = await Cart.aggregate([
+            {
+              $unwind: "$products",
+            },
+            {
+              $match: {
+                userId: userId,
+                "products.productId": objectId(productId),
+                "products.quantity": { $gte: 2 },
+              },
+            },
+          ]);
+
+          if (item.length < 1) {
+            resolve(item);
+            return;
+          }
+          
           await Cart.updateOne(
             {
               userId: objectId(userId),

@@ -80,7 +80,7 @@ module.exports={
                 //   }
                 let product=await Product.findOne({_id:productId});
                 let newPrice=product.price*offerPercentage/100;
-
+                
                 let response=await Product.updateOne({_id:productId}, {
                     $set:{
                         offer:{

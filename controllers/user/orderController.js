@@ -3,6 +3,7 @@ const Cart=require("../../models/user/cart");
 let objectId=require("mongoose").Types.ObjectId;
 const Razorpay = require("razorpay");
 let crypto=require("crypto");
+const Product=require("../../models/admin/Product");
 
 module.exports={
     addNewOrder:function(userId, address, products, totalPrice, paymentMethod){
@@ -18,7 +19,27 @@ module.exports={
                     }
                     productArray.push(body);
                 })
+
+                const productPushAndAction=async _=>{
+                    for(let i=0;i<products.length;i++){
+                        let body={
+                            productId:objectId(products[i].productId),
+                            quantity:products[i].quantity
+                        }
+                        productArray.push(body);
+                        let value=parseInt(0-products[i].quantity);
+                        await Product.updateOne({_id:objectId(products[i].productId)},{
+                            $inc:{
+                                quantity:value
+                            }
+                        })
+                    }
+                }
+                productPushAndAction();
                 let orderBody= {address,products:productArray,status:{state:"CONFIRMED", date:new Date()},totalPrice,paymentMethod}
+
+                // for loop decrement
+               
 
                 if(!existingUser){
                     let newOrder=new Order({
@@ -180,7 +201,7 @@ module.exports={
                 });
 
                 const options = {
-                    amount: amount*10, // amount in smallest currency unit
+                    amount: amount*100, // amount in smallest currency unit
                     currency: "INR",
                     receipt: "receipt_order_74394",
                 };
