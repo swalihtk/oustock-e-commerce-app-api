@@ -18,4 +18,8 @@ router.get("/", (req,res)=>{
     })
 })
 
+router.get("/total_sales_week", reportHelper.getTotalSalesInWeek)
+
+router.get("/dashboard", reportHelper.getDashboardDatas)
+
 module.exports=router;
