@@ -1,4 +1,5 @@
 const Product = require("../../models/admin/Product");
+const Orders=require("../../models/user/order");
 
 module.exports = {
   listLatestProduct: function () {
@@ -86,5 +87,47 @@ module.exports = {
         reject({error:e.message});
       }
     })
+  },
+
+  // @desc latest products
+  getLatestProducts:async function(req,res){
+    try{
+      let response=await Orders.aggregate([
+        {
+            $unwind:"$orderDetails"
+        },
+        {
+            $unwind:"$orderDetails.products"
+        },
+        {
+            $group:{
+                _id:"$orderDetails.products.productId", total:{$sum:"$orderDetails.products.quantity"}
+            }
+        },
+        {
+            $sort:{
+                total:-1
+            }
+        },
+        {
+            $lookup:{
+                from:"products",
+                localField:"_id",
+                foreignField:"_id",
+                as:"productDetails"
+            }
+        },
+        {
+            $unwind:"$productDetails"
+        },
+        {
+            $limit:8
+        }
+        ])
+      
+      res.status(200).json(response);
+    }catch(e){
+      res.json({error:e.message});
+    }
   }
 };

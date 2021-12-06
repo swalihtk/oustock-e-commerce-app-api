@@ -78,4 +78,7 @@ router.get("/getOfferd", (req,res)=>{
   })
 })
 
+// @desc route for latest products
+router.get("/get_trending", productController.getLatestProducts);
+
 module.exports = router;

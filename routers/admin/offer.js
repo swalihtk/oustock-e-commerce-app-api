@@ -70,4 +70,7 @@ router.get("/checkOfferExpires", (req,res)=>{
     })
 })
 
+// @desc apply offer for subcategory
+router.post("/apply_offer_for_category", offerController.setOfferForCategory);
+
 module.exports=router;

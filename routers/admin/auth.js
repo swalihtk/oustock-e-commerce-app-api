@@ -50,7 +50,7 @@ router.get("/check", (req, res) => {
     adminAuthController
       .adminFindOne(userId)
       .then((response) => {
-        res.json({ login: true, userId });
+        res.json({ login: true, userId, info:response });
       })
       .catch((err) => {
         res.json({ login: false });

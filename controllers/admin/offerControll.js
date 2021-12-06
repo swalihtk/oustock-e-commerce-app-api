@@ -79,7 +79,7 @@ module.exports={
                 //     offerId:{type:String}
                 //   }
                 let product=await Product.findOne({_id:productId});
-                let newPrice=product.price*offerPercentage/100;
+                let newPrice=product.price-(product.price*offerPercentage/100);
                 
                 let response=await Product.updateOne({_id:productId}, {
                     $set:{
@@ -126,5 +126,42 @@ module.exports={
                 reject({error:e.message});
             }
         })
+    },
+
+
+    // @desc apply offer for category
+    // @params offerPrice, offerName, offerId, expireDate, subCategoryName
+    // @return none
+    setOfferForCategory:async function(req,res){
+        try{
+            
+            let {offerName, percentage, offerId, expires, subCategoryName, categoryName}=req.body;
+            let response=await Product.find({category:categoryName, subCategory:subCategoryName});
+            
+            const updateProductsWithOffer=async _=>{
+                
+                for(let i=0;i<response.length;i++){
+                    let productId=response[i]._id;
+                    let newPrice=response[i].price-(response[i].price*(percentage/100));
+        
+                    await Product.updateOne({_id:productId}, {
+                        $set:{
+                            offer:{
+                                offerPrice:newPrice,
+                                expireDate:expires,
+                                offerName:offerName,
+                                offerId:offerId
+                            }
+                        }
+                    })
+                }
+
+                res.status(200).json({success:true})
+            }
+
+            updateProductsWithOffer();
+        }catch(e){
+            res.json({error:e.message});
+        }
     }
 }

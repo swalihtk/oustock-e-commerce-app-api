@@ -113,6 +113,11 @@ module.exports={
                     {
                         $limit:(pageNu*10)
                     },
+                    {
+                        $sort:{
+                            "orderDetails.date":-1
+                        }
+                    }
                     
                 ])
                 let count=await Order.aggregate([
