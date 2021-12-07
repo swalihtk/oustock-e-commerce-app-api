@@ -41,6 +41,7 @@ const adminProductManage = require("./routers/admin/product");
 const adminBanner=require("./routers/admin/banner");
 const adminOffer=require("./routers/admin/offer");
 const adminSalesReport=require("./routers/admin/saleReport");
+const adminCoupons=require("./routers/admin/coupons");
 
 app.use("/admin/auth", adminAuth);
 app.use("/admin/users", adminUserManage);
@@ -49,6 +50,7 @@ app.use("/admin/product", adminProductManage);
 app.use("/admin/banner", adminBanner);
 app.use("/admin/offers", adminOffer);
 app.use("/admin/sales_report", adminSalesReport);
+app.use("/admin/coupons", adminCoupons);
 
 // home
 const homeCategory = require("./routers/home/category");

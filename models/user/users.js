@@ -44,8 +44,8 @@ const userSchema=new mongoose.Schema({
         default:"user",
         type:String
     },
-    address:[addressShema]
-    
+    address:[addressShema],
+    coupons:{type:Array, required:true} 
 }, {timestamps:true, 
     writeConcern: {
         w: 'majority',
