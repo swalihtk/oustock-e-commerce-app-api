@@ -45,7 +45,8 @@ const userSchema=new mongoose.Schema({
         type:String
     },
     address:[addressShema],
-    coupons:{type:Array, required:true} 
+    coupons:{type:Array, required:true} ,
+    wallet:{}
 }, {timestamps:true, 
     writeConcern: {
         w: 'majority',

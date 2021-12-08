@@ -1,5 +1,6 @@
 const router = require("express").Router();
 const accountController = require("../../controllers/user/accountController");
+const referalController=require("../../controllers/user/referalController");
 
 router.get("/details/:userId", (req, res) => {
   accountController
@@ -70,8 +71,8 @@ router.put("/address/edit", (req, res)=>{
 
 // change account information
 router.put("/changeDetails/:id", (req,res)=>{
-    let {firstName, lastName, username, email}=req.body;
-    accountController.editUserDetails(req.params.id,firstName, lastName, username, email).then(response=>{
+    let {firstName, lastName, username, email, existingEmail}=req.body;
+    accountController.editUserDetails(req.params.id,firstName, lastName, username, email, existingEmail).then(response=>{
         res.status(201).json(response);
     }).catch(e=>{
         res.json(e);
@@ -97,5 +98,9 @@ router.put("/changeProfileImage/:id", (req,res)=>{
         res.status(401).json(e);
     })
 })
+
+// @desc  apply referal code
+// @params  referal
+router.post("/applyReferal", referalController.applyReferal);
 
 module.exports = router;

@@ -1,5 +1,6 @@
 const userSchema = require("../../models/user/users");
 const crypto = require("crypto");
+const referalCodeGenerator = require("referral-code-generator");
 
 module.exports = {
   createUser: function (body) {
@@ -19,8 +20,27 @@ module.exports = {
             username: body.username,
             email: body.email,
             password: password,
+            wallet: {
+              amount: 0,
+              referal: referalCodeGenerator.alpha(body.email, 12),
+            },
           });
           let saveuser = await user.save();
+          
+          // ****** checking referal *******
+          if(body.referal){
+            let referalUser = await userSchema.findOne({ "wallet.referal": body.referal });
+            await userSchema.updateOne(
+              { _id: referalUser._id },
+              {
+                $set: {
+                  "wallet.amount": referalUser.wallet.amount + 100,
+                },
+              }
+            );
+          }
+
+
           resolve(saveuser);
         }
       } catch (e) {

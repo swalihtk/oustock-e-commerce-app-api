@@ -28,6 +28,7 @@
     "jsonwebtoken": "^8.5.1",
     "mongoose": "^6.0.12",
     "multer-storage-cloudinary": "^4.0.0",
-    "razorpay": "^2.8.0"
+    "razorpay": "^2.8.0",
+    "referral-code-generator": "^1.0.8"
   }
 }

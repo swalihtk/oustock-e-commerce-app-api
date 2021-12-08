@@ -15,13 +15,16 @@ module.exports = {
     });
   },
 
-  editUserDetails:async(id,firstname, lastname, username, email)=>{
+  editUserDetails:async(id,firstname, lastname, username, email,existingEmail)=>{
     return new Promise(async(resolve,reject)=>{
       try{
-        let existingUserWithEmail=await Users.findOne({email:email});
-        if(existingUserWithEmail){
-          reject({error:"Email already registerd"});
-          return;
+       
+        if(email!==existingEmail){
+          let existingUserWithEmail=await Users.findOne({email:email});
+          if(existingUserWithEmail){
+            reject({error:"Email already registerd"});
+            return;
+          }
         }
 
         let response=await Users.updateOne({_id:id}, {

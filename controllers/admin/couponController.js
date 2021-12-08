@@ -103,7 +103,7 @@ module.exports={
             let response=await CouponModel.find({}).skip(page*10-10).limit(page*10);
             res.status(200).json(response); 
         }catch(e){
-            res.json({error:e.message});
+            res.status(400).json({error:e.message});
         }
     },
 

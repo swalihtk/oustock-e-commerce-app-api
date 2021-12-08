@@ -66,13 +66,13 @@ router.get("/check", (req, res) => {
       .userFindOne(userId)
       .then((response) => {
         if (response.isActive) {
-          res.json({ login: true, userId });
+          res.json({ login: true, userId, response });
         } else {
-          res.json({ login: false });
+          res.json({ login: false, userId:"", response:{} });
         }
       })
       .catch((err) => {
-        res.json({ login: false });
+        res.json({ login: false, userId:"", response:{} });
       });
   } else {
     res.json({ login: false });

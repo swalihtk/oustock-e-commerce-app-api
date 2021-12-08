@@ -102,7 +102,7 @@ module.exports={
             // array
             let priceArray=[];
             let dateArray=[];
-
+            
             sales.forEach((item)=>{
                 priceArray.push(item.total);
                 dateArray.push(`${item._id.day}/${item._id.month}/${item._id.year}`);
@@ -186,16 +186,17 @@ module.exports={
             ])
 
             let resBody={
-                allOrders:data[0][0].total,
-                totalSales:data[1][0].total,
-                totalRevenue:data[2][0].total,
-                totalReturns:data[3][0].total
+                allOrders:data[0][0]?.total,
+                totalSales:data[1][0]?.total,
+                totalRevenue:data[2][0]?.total,
+                totalReturns:data[3][0]?.total
             }
 
             res.status(200).json(resBody);
 
         }catch(e){
-            res.json({error:e.message});
+            console.log(e);
+            res.json({error:"something went wrong"});
         }
     }
 }

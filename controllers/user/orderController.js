@@ -13,6 +13,7 @@ module.exports={
 
                 let productArray=[];
                 products.forEach(item=>{
+                    console.log(typeof(item.quantity)+" ------------- "+item.quantity);
                     let body={
                         productId:objectId(item.productId),
                         quantity:item.quantity
@@ -228,7 +229,7 @@ module.exports={
                 .digest("hex");
 
                 if(generatedSignature===razorpaySignature){
-                    let response=await this.addNewOrder(userId, address, products, totalPrice, "Razorpay")
+                    let response=await this.addNewOrder(userId, address, products, parseInt(totalPrice/100), "Razorpay")
                     resolve(response);
                 }else{
                     reject({error:"error"})
