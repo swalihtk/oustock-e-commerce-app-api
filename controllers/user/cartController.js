@@ -1,12 +1,24 @@
 const Cart = require("../../models/user/cart");
 const objectId = require("mongoose").Types.ObjectId;
 const Product = require("../../models/admin/Product");
+const Whishlist=require("../../models/user/whishlist");
 
 module.exports = {
   addToCart: function (userId, productId) {
     return new Promise(async (resolve, reject) => {
       try {
         let existingCart = await Cart.findOne({ userId: objectId(userId) });
+
+        await Whishlist.updateOne({userId:userId},
+          {
+            $pull:{
+              products: {
+                productId:objectId(productId),
+              }
+            }
+            
+          }
+          )
 
         if (existingCart) {
           Cart.updateOne(
@@ -128,7 +140,7 @@ module.exports = {
   // delete product from cart
   delteProductFromCart: function (userId, productId) {
     return new Promise(async (resolve, reject) => {
-      console.log("dl", userId, productId);
+      // console.log("dl", userId, productId);
 
       try {
         Cart.updateOne(
