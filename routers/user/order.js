@@ -87,4 +87,10 @@ router.post("/razorpay/success", (req, res)=>{
     })
 })
 
+
+// @desc paypal integration
+router.get("/paypal/config", (req,res)=>{
+    res.json(process.env.PAYPAL_CLIENT_ID);
+})
+
 module.exports = router;
