@@ -32,6 +32,9 @@ mongoose.connect(process.env.MONGODB, (err) => {
 });
 
 // app routes
+app.get("/", (req,res)=>{
+  res.send("Outstock E-Commerce App");
+})
 
 // admin
 const adminAuth = require("./routers/admin/auth");
