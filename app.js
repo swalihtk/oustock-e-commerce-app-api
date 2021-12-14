@@ -46,21 +46,21 @@ const adminOffer=require("./routers/admin/offer");
 const adminSalesReport=require("./routers/admin/saleReport");
 const adminCoupons=require("./routers/admin/coupons");
 
-app.use("/api/admin/auth", adminAuth);
-app.use("/api/admin/users", adminUserManage);
-app.use("/api/admin/category", adminCategoryManage);
-app.use("/api/admin/product", adminProductManage);
-app.use("/api/admin/banner", adminBanner);
-app.use("/api/admin/offers", adminOffer);
-app.use("/api/admin/sales_report", adminSalesReport);
-app.use("/api/admin/coupons", adminCoupons);
+app.use("/admin/auth", adminAuth);
+app.use("/admin/users", adminUserManage);
+app.use("/admin/category", adminCategoryManage);
+app.use("/admin/product", adminProductManage);
+app.use("/admin/banner", adminBanner);
+app.use("/admin/offers", adminOffer);
+app.use("/admin/sales_report", adminSalesReport);
+app.use("/admin/coupons", adminCoupons);
 
 // home
 const homeCategory = require("./routers/home/category");
 const productHome = require("./routers/home/products");
 
-app.use("/api/home/category", homeCategory);
-app.use("/api/home/products", productHome);
+app.use("/home/category", homeCategory);
+app.use("/home/products", productHome);
 
 // product
 
@@ -71,11 +71,11 @@ const cart = require("./routers/user/cart");
 const order = require("./routers/user/order");
 const whishlist=require("./routers/user/whishlist");
 
-app.use("/api/user/auth", auth);
-app.use("/api/user/account", account);
-app.use("/api/user/cart", cart);
-app.use("/api/user/order", order);
-app.use("/api/user/whishlist", whishlist);
+app.use("/user/auth", auth);
+app.use("/user/account", account);
+app.use("/user/cart", cart);
+app.use("/user/order", order);
+app.use("/user/whishlist", whishlist);
 
 // app listening
 app.listen(process.env.PORT, () =>
