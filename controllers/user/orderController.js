@@ -13,7 +13,7 @@ module.exports={
 
                 let productArray=[];
                 products.forEach(item=>{
-                    console.log(typeof(item.quantity)+" ------------- "+item.quantity);
+                  
                     let body={
                         productId:objectId(item.productId),
                         quantity:item.quantity
@@ -21,14 +21,11 @@ module.exports={
                     productArray.push(body);
                 })
 
+
                 const productPushAndAction=async _=>{
                     for(let i=0;i<products.length;i++){
-                        let body={
-                            productId:objectId(products[i].productId),
-                            quantity:products[i].quantity
-                        }
-                        productArray.push(body);
                         let value=parseInt(0-products[i].quantity);
+                       
                         await Product.updateOne({_id:objectId(products[i].productId)},{
                             $inc:{
                                 quantity:value
