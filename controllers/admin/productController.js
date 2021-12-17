@@ -21,7 +21,7 @@ module.exports = {
           if (count === images.length) {
             let productSave = new Product({
               name: body.name,
-              price: body.price,
+              price: Math.round(body.price),
               color: body.color,
               brand: body.brand,
               category: body.category,
@@ -48,7 +48,7 @@ module.exports = {
         let products = await Product.find({category:{$regex:categoryName}, name:{$regex:name, $options:"i"}})
           .sort({ createdAt: sort })
           .skip(pageNum * 10 - 10)
-          .limit(pageNum * 10);
+          .limit(10);
         let productLength = await Product.find({category:{$regex:categoryName}, name:{$regex:name, $options:"i"}}).count();
         resolve({ products, count: productLength });
       } catch (e) {
@@ -77,7 +77,7 @@ module.exports = {
               {
                 $set: {
                   name: body.name,
-                  price: body.price,
+                  price: Math.round(body.price),
                   discription: body.discription,
                   color: body.color,
                   brand: body.color,

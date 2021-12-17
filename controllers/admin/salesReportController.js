@@ -4,6 +4,7 @@ const Order=require("../../models/user/order");
 module.exports={
     getSalesReport:function(page, year, month, dateFrom, dateEnd){
         return new Promise(async(resolve,reject)=>{
+            console.log(page*10-10+" "+page*10);
             try{
                 let result=await Order.aggregate([
                     {
@@ -30,7 +31,7 @@ module.exports={
                         $skip:page*10-10
                     },
                     {
-                        $limit:page*10
+                        $limit:10
                     }
                 ]);
 
@@ -188,7 +189,7 @@ module.exports={
             let resBody={
                 allOrders:data[0][0]?.total,
                 totalSales:data[1][0]?.total,
-                totalRevenue:data[2][0]?.total,
+                totalRevenue:Math.round(data[2][0]?.total),
                 totalReturns:data[3][0]?.total
             }
 

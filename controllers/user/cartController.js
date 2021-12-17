@@ -57,80 +57,95 @@ module.exports = {
   },
 
   // quantiy manager
-  quantityManager: function (userId, productId, action) {
+  quantityManager: function (userId, productId, quantity) {
     return new Promise(async (resolve, reject) => {
       try {
-        if (action === 1) {
-          let item = await Cart.aggregate([
-            {
-              $unwind: "$products",
-            },
-            {
-              $match: {
-                userId: userId,
-                "products.productId": objectId(productId),
-                "products.quantity": { $lt: 3 },
-              },
-            },
-          ]);
+        // if (action === 1) {
+        //   let item = await Cart.aggregate([
+        //     {
+        //       $unwind: "$products",
+        //     },
+        //     {
+        //       $match: {
+        //         userId: userId,
+        //         "products.productId": objectId(productId),
+        //         "products.quantity": { $lt: 3 },
+        //       },
+        //     },
+        //   ]);
 
-          if (item.length < 1) {
-            resolve(item);
-            return;
-          }
+        //   if (item.length < 1) {
+        //     resolve(item);
+        //     return;
+        //   }
 
-          // checking quantity
-          let product=await Product.findOne({_id:productId});
+        //   // checking quantity
+        //   let product=await Product.findOne({_id:productId});
           
-          if(product.quantity<=item[0].products.quantity){
-            resolve("Quantity limited..");
-            return;
-          }
+        //   if(product.quantity<=item[0].products.quantity){
+        //     resolve("Quantity limited..");
+        //     return;
+        //   }
 
-          await Cart.updateOne(
+        //   await Cart.updateOne(
+        //     {
+        //       userId: objectId(userId),
+        //       "products.productId": objectId(productId),
+        //     },
+        //     {
+        //       $inc: {
+        //         "products.$.quantity": 1,
+        //       },
+        //     }
+        //   );
+        // } else {
+        //   let item = await Cart.aggregate([
+        //     {
+        //       $unwind: "$products",
+        //     },
+        //     {
+        //       $match: {
+        //         userId: userId,
+        //         "products.productId": objectId(productId),
+        //         "products.quantity": { $gte: 2 },
+        //       },
+        //     },
+        //   ]);
+
+        //   if (item.length < 1) {
+        //     resolve(item);
+        //     return;
+        //   }
+          
+        //   await Cart.updateOne(
+        //     {
+        //       userId: objectId(userId),
+        //       "products.productId": objectId(productId),
+        //     },
+        //     {
+        //       $inc: {
+        //         "products.$.quantity": -1,
+        //       },
+        //     }
+        //   );
+        // }
+
+        // resolve("Count changed");
+
+          let response=await Cart.updateOne(
             {
               userId: objectId(userId),
               "products.productId": objectId(productId),
             },
             {
-              $inc: {
-                "products.$.quantity": 1,
+              $set: {
+                "products.$.quantity": quantity,
               },
             }
           );
-        } else {
-          let item = await Cart.aggregate([
-            {
-              $unwind: "$products",
-            },
-            {
-              $match: {
-                userId: userId,
-                "products.productId": objectId(productId),
-                "products.quantity": { $gte: 2 },
-              },
-            },
-          ]);
 
-          if (item.length < 1) {
-            resolve(item);
-            return;
-          }
-          
-          await Cart.updateOne(
-            {
-              userId: objectId(userId),
-              "products.productId": objectId(productId),
-            },
-            {
-              $inc: {
-                "products.$.quantity": -1,
-              },
-            }
-          );
-        }
-
-        resolve("Count changed");
+          resolve(response);
+        
       } catch (err) {
         reject(err.message);
       }
