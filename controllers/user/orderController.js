@@ -109,7 +109,7 @@ module.exports={
                         $skip:(pageNu*10-10)
                     },
                     {
-                        $limit:(pageNu*10)
+                        $limit:(10)
                     },
                     {
                         $sort:{

@@ -18,13 +18,13 @@ router.post("/countManage", (req, res) => {
   /**** Body ***
    * userId
    * productId
-   * action -> 1 for increment 0 for decrement
+   * quantity
    * */
 
-  let { userId, productId, action } = req.body;
+  let { userId, productId, quantity } = req.body;
 
   cartController
-    .quantityManager(userId, productId, action)
+    .quantityManager(userId, productId, quantity)
     .then((response) => {
       res.status(201).json(response);
     })
