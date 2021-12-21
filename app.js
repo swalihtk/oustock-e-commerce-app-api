@@ -6,6 +6,7 @@ const cors = require("cors");
 const fileUpload = require("express-fileupload");
 
 const app = express();
+const PORT=process.argv[2] || process.env.PORT;
 
 // dotenv config
 dotenv.config();
@@ -78,6 +79,6 @@ app.use("/user/order", order);
 app.use("/user/whishlist", whishlist);
 
 // app listening
-app.listen(process.env.PORT, () =>
-  console.log("Server running on port " + process.env.PORT)
+app.listen(PORT, () =>
+  console.log("Server running on port " + PORT)
 );
