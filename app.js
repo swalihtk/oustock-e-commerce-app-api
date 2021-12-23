@@ -6,7 +6,7 @@ const cors = require("cors");
 const fileUpload = require("express-fileupload");
 
 const app = express();
-const PORT=process.argv[2] || process.env.PORT;
+const PORT=process.env.PORT;
 
 // dotenv config
 dotenv.config();
