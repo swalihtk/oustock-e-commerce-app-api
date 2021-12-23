@@ -147,7 +147,7 @@ module.exports={
                     await Product.updateOne({_id:productId}, {
                         $set:{
                             offer:{
-                                offerPrice:newPrice,
+                                offerPrice:Math.round(newPrice),
                                 expireDate:expires,
                                 offerName:offerName,
                                 offerId:offerId
