@@ -79,12 +79,12 @@ module.exports={
                 //     offerId:{type:String}
                 //   }
                 let product=await Product.findOne({_id:productId});
-                let newPrice=Math.round(product.price-(product.price*offerPercentage/100));
+                let newPrice=product.price-(product.price*offerPercentage/100);
                 
                 let response=await Product.updateOne({_id:productId}, {
                     $set:{
                         offer:{
-                            offerPrice:newPrice,
+                            offerPrice:Math.round(newPrice),
                             expireDate:expires,
                             offerName:offerName,
                             offerId:offerId
