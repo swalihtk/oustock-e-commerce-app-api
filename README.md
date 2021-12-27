@@ -28,5 +28,14 @@
 - sales report
 - users
 
+## Technology Used
+- Nodejs
+- React
+- Mongodb
+- Express
+- React
+- JWT
+- Cloudinary
 
-# 🛒🛒🙂🙂
+
+## 🛒🛒🙂🙂
